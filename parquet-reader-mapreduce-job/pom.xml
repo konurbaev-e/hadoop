@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.konurbaev.hadoop</groupId>
-    <artifactId>parquet-reader</artifactId>
+    <artifactId>parquet-reader-mapreduce-job</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
