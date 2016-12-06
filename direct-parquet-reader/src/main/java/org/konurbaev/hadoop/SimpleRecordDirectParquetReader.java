@@ -13,6 +13,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.konurbaev.hadoop.Constants.FILE_URI;
 import static org.konurbaev.hadoop.Constants.TARGET_FIELD;
@@ -30,20 +35,37 @@ public class SimpleRecordDirectParquetReader {
         int counter = 0;
         for (SimpleRecord simpleRecord = reader.read(); simpleRecord != null; simpleRecord = reader.read()) {
             logger.info("Record #" + ++counter);
-            simpleRecord.getValues()
+            Map<String, Object> counters = new HashMap();
+            Optional<SimpleMapRecord> firstLevel = simpleRecord.getValues()
                     .stream()
                     .filter(record -> record.getName().equals(TARGET_FIELD) && record.getValue() instanceof SimpleMapRecord)
-                    .map(record -> (SimpleMapRecord)record.getValue())
-                    .findFirst()
-                    .ifPresent(simpleMapRecord -> simpleMapRecord.getValues()
-                            .forEach(nameValue -> logger.info(nameValue.getName() + ": " + nameValue.getValue())));
+                    .map(record -> (SimpleMapRecord) record.getValue())
+                    .findFirst();
+            if (firstLevel.isPresent()) {
+                List<List<SimpleRecord.NameValue>> secondLevel = firstLevel.get().getValues().stream().map(k -> (SimpleRecord) k.getValue()).map(SimpleRecord::getValues).collect(Collectors.toList());
+
+                for (List<SimpleRecord.NameValue> aSecondLevel : secondLevel) {
+                    String currentKey = null;
+                    for (SimpleRecord.NameValue anASecondLevel : aSecondLevel) {
+                        if (anASecondLevel.getName().equals("key")) {
+                            currentKey = (String) anASecondLevel.getValue();
+                            continue;
+                        }
+                        counters.put(currentKey, anASecondLevel.getValue());
+                    }
+                }
+                // debug
+                counters.forEach((key, value) -> logger.info("key: " + key + "; value: " + value));
+                // end debug
+            }
         }
+        logger.info("ending work ...");
     }
-
-
-
-
-
-
-
 }
+
+
+
+
+
+
+
