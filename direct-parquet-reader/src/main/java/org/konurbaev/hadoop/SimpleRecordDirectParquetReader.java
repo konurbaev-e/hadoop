@@ -17,6 +17,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.konurbaev.hadoop.Constants.FILE_URI;
+import static org.konurbaev.hadoop.Constants.MAP_KEY;
 import static org.konurbaev.hadoop.Constants.TARGET_FIELD;
 
 public class SimpleRecordDirectParquetReader {
@@ -44,7 +45,7 @@ public class SimpleRecordDirectParquetReader {
                 for (List<SimpleRecord.NameValue> aSecondLevel : secondLevel) {
                     String currentKey = null;
                     for (SimpleRecord.NameValue anASecondLevel : aSecondLevel) {
-                        if (anASecondLevel.getName().equals("key")) {
+                        if (anASecondLevel.getName().equals(MAP_KEY)) {
                             currentKey = (String) anASecondLevel.getValue();
                             continue;
                         }
