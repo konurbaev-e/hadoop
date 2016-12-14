@@ -32,7 +32,7 @@ public class SimpleRecordDirectParquetReader {
         int counter = 0;
         for (SimpleRecord simpleRecord = reader.read(); simpleRecord != null; simpleRecord = reader.read()) {
             logger.info("Record #" + ++counter);
-            Map<String, Object> counters = new HashMap();
+            Map<String, Object> counters = new HashMap<>();
             Optional<SimpleMapRecord> firstLevel = simpleRecord.getValues()
                     .stream()
                     .filter(record -> record.getName().equals(TARGET_FIELD) && record.getValue() instanceof SimpleMapRecord)
