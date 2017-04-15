@@ -1,6 +1,6 @@
 package org.konurbaev.hadoop;
 
-public interface Constants {
-    String FILE_URI = "file:///D:/tmp/my.gz.parquet";
-    String TARGET_FIELD = "counters";
+public final class Constants {
+    public final static String FILE_URI = "file:///D:/tmp/my.gz.parquet";
+    public final static String TARGET_FIELD = "counters";
 }

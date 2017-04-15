@@ -1,5 +1,5 @@
 package org.konurbaev.hadoop;
 
-public interface Constants {
-    String SCHEMA = "schema";
+public final class Constants {
+    public static final String SCHEMA = "schema";
 }
